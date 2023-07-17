@@ -3,11 +3,10 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/customs_duty", () => TheAmountOfCustomsDuty(525));
-app.MapGet("/full_date", () => 
+app.MapGet("/customs_duty/{price}", (int price) => TheAmountOfCustomsDuty(price));
+app.MapGet("/full_date/{language}", (string language) => 
 {
     DateTime now = DateTime.Now;
-    string language = "zh";
     CultureInfo culture = CultureInfo.GetCultureInfo(language);
 
     string dayOfWeek = culture.DateTimeFormat.GetDayName(now.DayOfWeek);
@@ -30,5 +29,5 @@ string TheAmountOfCustomsDuty(int price)
         customs_duty = (price - 200) * 0.15m;
     }
 
-    return $"Стоимость посылки: {price}€\nПошлина: {customs_duty}";
+    return $"Стоимость посылки: {price}\nПошлина: {customs_duty}\nИтого: {price + customs_duty}";
 }
